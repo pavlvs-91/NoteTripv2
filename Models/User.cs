@@ -21,5 +21,7 @@ namespace NoteTrip.Models
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email Address")]
         public required string Email { get; set; }
+
+        public ICollection<Country>? Countries { get; set; }
     }
 }

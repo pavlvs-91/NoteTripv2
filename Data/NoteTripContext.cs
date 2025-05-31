@@ -15,5 +15,9 @@ namespace NoteTrip.Data
         }
 
         public DbSet<NoteTrip.Models.User> User { get; set; } = default!;
+        public DbSet<NoteTrip.Models.Country> Country { get; set; } = default!;
+        public DbSet<NoteTrip.Models.Region> Region { get; set; } = default!;
+        public DbSet<NoteTrip.Models.City> City { get; set; } = default!;
+        public DbSet<NoteTrip.Models.TouristAttraction> TouristAttraction { get; set; } = default!;
     }
 }
