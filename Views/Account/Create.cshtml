@@ -1,0 +1,123 @@
+@model NoteTrip.Models.User
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500&family=Playfair+Display&display=swap" rel="stylesheet" />
+
+<style>
+    body {
+        background-color: #fcf8f3;
+    }
+
+    .form-container {
+        max-width: 450px;
+        margin: 3rem auto;
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+        text-align: center;
+        font-family: 'Raleway', sans-serif;
+        border: 1px solid #e5d8c4;
+    }
+
+    .form-container h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+        color: #5b4636;
+    }
+
+    .form-container h4 {
+        margin-bottom: 1rem;
+        font-weight: 600;
+        color: #5b4636;
+    }
+
+    .validation-info {
+        color: #b30000;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    label, .form-label {
+        font-weight: 600;
+        color: #5b4636;
+    }
+
+    input.form-control {
+        margin-bottom: 0.75rem;
+        border: 1px solid #d5c4af;
+        border-radius: 6px;
+        padding: 0.5rem;
+    }
+
+    button.btn-primary {
+        background-color: #5b4636;
+        border: none;
+        color: #fcefd9;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        border-radius: 6px;
+        width: 100%;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    button.btn-primary:hover {
+        background-color: #745b47;
+    }
+</style>
+
+<div class="form-container">
+    <h1>Create Account</h1>
+
+    @if (TempData["info"] != null)
+    {
+        <div class="validation-info">@TempData["info"]</div>
+    }
+
+    <h4>User</h4>
+    <hr />
+
+    <form asp-action="Create" method="post" novalidate>
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="mb-3 text-start">
+            <label asp-for="Login" class="form-label"></label>
+            <input asp-for="Login" class="form-control" />
+            <span asp-validation-for="Login" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 text-start">
+            <label asp-for="FirstName" class="form-label"></label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 text-start">
+            <label asp-for="LastName" class="form-label"></label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 text-start">
+            <label asp-for="Password" class="form-label"></label>
+            <input asp-for="Password" type="password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="mb-4 text-start">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" type="email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,40 @@
+<div id="chartdiv" style="width: 100%; height: 500px;"></div>
+
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/map.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
+<script>
+  let visitedCountries = @Html.Raw(ViewData["VisitedCountriesJson"]);
+
+  am5.ready(function() {
+    var root = am5.Root.new("chartdiv");
+
+    var chart = root.container.children.push(am5map.MapChart.new(root, {
+      panX: "translateX",
+      panY: "translateY",
+      wheelX: "zoom",
+      wheelY: "zoom",
+      projection: am5map.geoMercator()
+    }));
+
+    // Zoom control
+    chart.set("zoomControl", am5map.ZoomControl.new(root, {}));
+
+    var polygonSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
+      geoJSON: am5geodata_worldLow
+    }));
+
+    polygonSeries.mapPolygons.template.setAll({
+      tooltipText: "{name}",
+      interactive: true
+    });
+
+    polygonSeries.mapPolygons.template.adapters.add("fill", function(fill, target) {
+      let id = target.dataItem.dataContext.id;
+      if (visitedCountries.includes(id)) {
+        return am5.color(0xff0000); // kolor zaznaczenia
+      }
+      return fill;
+    });
+  });
+</script>
