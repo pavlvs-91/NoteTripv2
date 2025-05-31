@@ -61,11 +61,12 @@ namespace NoteTrip.Controllers
         {
             if (ModelState.IsValid)
             {
+                string? userLogin = HttpContext.Session.GetString("login");
+                country.UserLogin = userLogin;
                 _context.Add(country);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserLogin"] = new SelectList(_context.User, "Login", "Login", country.UserLogin);
             return View(country);
         }
 

@@ -99,8 +99,20 @@
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">🔐 Privacy</a>
                         </li>
                         <li class="nav-item"></li>
-                            <a class="nav-link" asp-area="" asp-controller="Map" asp-action="Show">🗺️ Map</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Documentation">📄 Documentation</a>
                         </li>
+                        @if (Context.Session.GetString("login") != null) 
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Country" asp-action="Index">🏕️ Your trips</a>
+                            </li>
+                        }
+                        @if (Context.Session.GetString("login") != null) 
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Map" asp-action="Show">🗺️ Map</a>
+                            </li>
+                        }
                     </ul>
                     @if (Context.Session.GetString("login") != null)
                     {
