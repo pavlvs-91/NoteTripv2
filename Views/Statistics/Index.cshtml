@@ -1,0 +1,81 @@
+@model NoteTrip.Models.StatisticsViewModel
+@{
+    ViewData["Title"] = "Statistics";
+}
+
+<h2>Global statistics</h2>
+<ul>
+    <li>Number of countries with at least 1 attraction visited: <strong>@ViewBag.VisitedCountriesCount</strong></li>
+    <li>Number of cities with at least 1 attraction visited: <strong>@ViewBag.VisitedCitiesCount</strong></li>
+</ul>
+<h2>Highest rating attractions</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>City</th>
+            <th>Region</th>
+            <th>County</th>
+            <th>Rate</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var attraction in ViewBag.TopAttractions)
+        {
+            <tr>
+                <td>@attraction.Name</td>
+                <td>@attraction.City?.Name</td>
+                <td>@attraction.City?.Region?.Name</td>
+                <td>@attraction.City?.Region?.Country?.Name</td>
+                <td>@attraction.Rate</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<h2>Country Statistics</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Country</th>
+            <th>Visited Attractions</th>
+            <th>Total Attractions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var country in Model.CountryStats)
+        {
+            <tr>
+                <td>@country.CountryName</td>
+                <td>@country.VisitedCount</td>
+                <td>@country.TotalAttractions</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>City Statistics</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>City</th>
+            <th>Region</th>
+            <th>Country</th>
+            <th>Visited %</th>
+            <th>Visited / Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var city in Model.CityStats)
+        {
+            <tr>
+                <td>@city.CityName</td>
+                <td>@city.RegionName</td>
+                <td>@city.CountryName</td>
+                <td>@city.VisitedPercentage %</td>
+                <td>@city.VisitedAttractions / @city.TotalAttractions</td>
+            </tr>
+        }
+    </tbody>
+</table>

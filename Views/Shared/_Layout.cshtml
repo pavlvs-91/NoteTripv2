@@ -128,6 +128,12 @@
                         @if (Context.Session.GetString("login") != null) 
                         {
                             <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Statistics" asp-action="Index">📑 Statistics</a>
+                            </li>
+                        }
+                        @if (Context.Session.GetString("login") != null) 
+                        {
+                            <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Map" asp-action="Show">🗺️ Map</a>
                             </li>
                         }
