@@ -9,6 +9,17 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form method="get" asp-action="Index" class="mb-3">
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="countryId">Filter by country</label>
+            <select name="countryId" class="form-control" onchange="this.form.submit()" asp-items="ViewBag.CountryId">
+                <option value="">-- All countries --</option>
+            </select>
+        </div>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>

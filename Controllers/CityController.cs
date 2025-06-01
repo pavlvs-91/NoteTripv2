@@ -19,12 +19,32 @@ namespace NoteTrip.Controllers
             _context = context;
         }
 
-        // GET: City
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? countryId, int? regionId)
         {
-            var noteTripContext = _context.City.Include(c => c.Region).ThenInclude(r => r.Country);;
-            return View(await noteTripContext.ToListAsync());
+            string? userLogin = HttpContext.Session.GetString("login");
+
+            var cities = _context.City.Include(c => c.Region).ThenInclude(r => r.Country)
+                .Where(t => t.Region.Country.UserLogin == userLogin).AsQueryable();
+
+            if (countryId.HasValue)
+                cities = cities.Where(t => t.Region.CountryId == countryId.Value);
+
+            if (regionId.HasValue)
+                cities = cities.Where(t => t.RegionId == regionId.Value);
+
+            var userCountries = _context.Country.Where(c => c.UserLogin == userLogin).ToList();
+
+            var userRegions = _context.Region.Where(r => userCountries.Select(c => c.Id).Contains(r.CountryId)).ToList();
+
+            ViewBag.CountryId = new SelectList(userCountries, "Id", "Name", countryId);
+            ViewBag.RegionId = new SelectList(
+                userRegions.Where(r => !countryId.HasValue || r.CountryId == countryId.Value),
+                "Id", "Name", regionId
+            );
+            
+            return View(await cities.ToListAsync());
         }
+
 
         // GET: City/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -68,7 +88,6 @@ namespace NoteTrip.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            // ViewData["RegionId"] = new SelectList(_context.Region, "Id", "Id", city.RegionId);
             string? userLogin = HttpContext.Session.GetString("login");
             var userRegions = _context.Region.Include(r => r.Country).Where(r => r.Country.UserLogin == userLogin).ToList();
             ViewData["RegionId"] = new SelectList(userRegions, "Id", "Name", city.RegionId);

@@ -20,10 +20,33 @@ namespace NoteTrip.Controllers
         }
 
         // GET: Region
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? countryId)
         {
-            var noteTripContext = _context.Region.Include(r => r.Country);
-            return View(await noteTripContext.ToListAsync());
+            // var noteTripContext = _context.Region.Include(r => r.Country);
+            // return View(await noteTripContext.ToListAsync());
+
+            string? userLogin = HttpContext.Session.GetString("login");
+            var regions = _context.Region.Include(r => r.Country).Where(t => t.Country.UserLogin == userLogin).AsQueryable();
+
+            if (countryId.HasValue)
+                regions = regions.Where(t => t.CountryId == countryId.Value);
+
+            var userCountries = _context.Country.Where(c => c.UserLogin == userLogin).ToList();
+            ViewBag.CountryId = new SelectList(userCountries, "Id", "Name", countryId);
+
+            // var userCountries = await _context.Country.Where(c => c.UserLogin == userLogin).ToListAsync();
+            // ViewData["CountryId"] = new SelectList(userCountries, "Id", "Name");
+
+            // var regionsQuery = _context.Region.Include(r => r.Country).Where(r => r.Country.UserLogin == userLogin);
+
+            // if (countryId.HasValue)
+            // {
+            //     regionsQuery = regionsQuery.Where(r => r.CountryId == countryId.Value);
+            // }
+
+            // var regions = await regionsQuery.ToListAsync();
+            // return View(regions);
+            return View(await regions.ToListAsync());
         }
 
         // GET: Region/Details/5

@@ -19,11 +19,42 @@ namespace NoteTrip.Controllers
             _context = context;
         }
 
-        // GET: TouristAttraction
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? countryId, int? regionId, int? cityId)
         {
-            var noteTripContext = _context.TouristAttraction.Include(t => t.City);
-            return View(await noteTripContext.ToListAsync());
+            string? userLogin = HttpContext.Session.GetString("login");
+
+            var attractions = _context.TouristAttraction.Include(t => t.City).ThenInclude(c => c.Region).ThenInclude(r => r.Country)
+                .Where(t => t.City.Region.Country.UserLogin == userLogin).AsQueryable();
+
+            if (countryId.HasValue)
+                attractions = attractions.Where(t => t.City.Region.CountryId == countryId.Value);
+
+            if (regionId.HasValue)
+                attractions = attractions.Where(t => t.City.RegionId == regionId.Value);
+
+            if (cityId.HasValue)
+                attractions = attractions.Where(t => t.CityId == cityId.Value);
+
+            var userCountries = _context.Country.Where(c => c.UserLogin == userLogin).ToList();
+
+            var userRegions = _context.Region.Where(r => userCountries.Select(c => c.Id).Contains(r.CountryId)).ToList();
+
+            var userCities = _context.City.Where(c => userRegions.Select(r => r.Id).Contains(c.RegionId)).ToList();
+
+            ViewBag.CountryId = new SelectList(userCountries, "Id", "Name", countryId);
+            ViewBag.RegionId = new SelectList(
+                userRegions.Where(r => !countryId.HasValue || r.CountryId == countryId.Value),
+                "Id", "Name", regionId
+            );
+            ViewBag.CityId = new SelectList(
+                userCities.Where(c =>
+                    (!regionId.HasValue || c.RegionId == regionId.Value) &&
+                    (!countryId.HasValue || c.Region.CountryId == countryId.Value)
+                ),
+                "Id", "Name", cityId
+            );
+
+            return View(await attractions.ToListAsync());
         }
 
         // GET: TouristAttraction/Details/5
@@ -48,7 +79,10 @@ namespace NoteTrip.Controllers
         // GET: TouristAttraction/Create
         public IActionResult Create()
         {
-            ViewData["CityId"] = new SelectList(_context.City, "Id", "Id");
+            string? userLogin = HttpContext.Session.GetString("login");
+            var userCities = _context.City.Include(t => t.Region).ThenInclude(r => r.Country).Where(r => r.Region.Country.UserLogin == userLogin).ToList();
+            ViewData["CityId"] = new SelectList(userCities, "Id", "Name");
+
             return View();
         }
 
@@ -65,7 +99,10 @@ namespace NoteTrip.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CityId"] = new SelectList(_context.City, "Id", "Id", touristAttraction.CityId);
+            string? userLogin = HttpContext.Session.GetString("login");
+            var userCities = _context.City.Include(t => t.Region).ThenInclude(r => r.Country).Where(r => r.Region.Country.UserLogin == userLogin).ToList();
+            ViewData["CityId"] = new SelectList(userCities, "Id", "Name", touristAttraction.CityId);
+
             return View(touristAttraction);
         }
 
@@ -82,7 +119,10 @@ namespace NoteTrip.Controllers
             {
                 return NotFound();
             }
-            ViewData["CityId"] = new SelectList(_context.City, "Id", "Id", touristAttraction.CityId);
+            string? userLogin = HttpContext.Session.GetString("login");
+            var userCities = _context.City.Include(t => t.Region).ThenInclude(r => r.Country).Where(r => r.Region.Country.UserLogin == userLogin).ToList();
+            ViewData["CityId"] = new SelectList(userCities, "Id", "Name", touristAttraction.CityId);
+            
             return View(touristAttraction);
         }
 
@@ -118,7 +158,10 @@ namespace NoteTrip.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CityId"] = new SelectList(_context.City, "Id", "Id", touristAttraction.CityId);
+            string? userLogin = HttpContext.Session.GetString("login");
+            var userCities = _context.City.Include(t => t.Region).ThenInclude(r => r.Country).Where(r => r.Region.Country.UserLogin == userLogin).ToList();
+            ViewData["CityId"] = new SelectList(userCities, "Id", "Name", touristAttraction.CityId);
+
             return View(touristAttraction);
         }
 
