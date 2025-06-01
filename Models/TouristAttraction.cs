@@ -27,11 +27,10 @@ namespace NoteTrip.Models
         [Display(Name = "Rate /10")]
         public required int Rate { get; set; }
 
-        [Required]
         [Display(Name = "City Id")]
-        public required int CityId { get; set; }
+        public int? CityId { get; set; }
 
         [ForeignKey("CityId")]
-        public required City City { get; set; }
+        public City? City { get; set; }
     }
 }

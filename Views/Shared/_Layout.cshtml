@@ -104,7 +104,25 @@
                         @if (Context.Session.GetString("login") != null) 
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Country" asp-action="Index">🏕️ Your trips</a>
+                                <a class="nav-link" asp-area="" asp-controller="Country" asp-action="Index">🌏 Your countries</a>
+                            </li>
+                        }
+                        @if (Context.Session.GetString("login") != null) 
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Region" asp-action="Index">🏕️ Your regions</a>
+                            </li>
+                        }
+                        @if (Context.Session.GetString("login") != null) 
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="City" asp-action="Index">🌆 Your cities</a>
+                            </li>
+                        }
+                        @if (Context.Session.GetString("login") != null) 
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="TouristAttraction" asp-action="Index">⛪ Your attractions</a>
                             </li>
                         }
                         @if (Context.Session.GetString("login") != null) 

@@ -24,12 +24,12 @@ namespace NoteTrip.Models
         [Display(Name = "Capital City")]
         public required string Capital { get; set; }
 
-        [Required]
         [Display(Name = "User Login")]
-        public required string UserLogin { get; set; }
+        public string? UserLogin { get; set; }
 
         [ForeignKey("UserLogin")]
-        public required User User { get; set; }
+        public User? User { get; set; }
+
         public ICollection<Region>? Regions { get; set; }
     }
 }

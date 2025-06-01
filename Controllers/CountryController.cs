@@ -57,12 +57,13 @@ namespace NoteTrip.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Continent,Language,Currency,Capital,UserLogin")] Country country)
+        public async Task<IActionResult> Create([Bind("Id,Name,Continent,Language,Currency,Capital")] Country country)
         {
+            string? userLogin = HttpContext.Session.GetString("login");
+            country.UserLogin = userLogin;
+
             if (ModelState.IsValid)
             {
-                string? userLogin = HttpContext.Session.GetString("login");
-                country.UserLogin = userLogin;
                 _context.Add(country);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -92,12 +93,15 @@ namespace NoteTrip.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Continent,Language,Currency,Capital,UserLogin")] Country country)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Continent,Language,Currency,Capital")] Country country)
         {
             if (id != country.Id)
             {
                 return NotFound();
             }
+
+            string? userLogin = HttpContext.Session.GetString("login");
+            country.UserLogin = userLogin;
 
             if (ModelState.IsValid)
             {
