@@ -48,7 +48,10 @@ namespace NoteTrip.Controllers
         // GET: Region/Create
         public IActionResult Create()
         {
-            ViewData["CountryId"] = new SelectList(_context.Country, "Id", "UserLogin");
+            string? userLogin = HttpContext.Session.GetString("login");
+            var userCountries = _context.Country.Where(c => c.UserLogin == userLogin).ToList();
+
+            ViewData["CountryId"] = new SelectList(userCountries, "Id", "Name");
             return View();
         }
 
@@ -82,7 +85,11 @@ namespace NoteTrip.Controllers
             {
                 return NotFound();
             }
-            ViewData["CountryId"] = new SelectList(_context.Country, "Id", "UserLogin", region.CountryId);
+
+            string? userLogin = HttpContext.Session.GetString("login");
+            var userCountries = _context.Country.Where(c => c.UserLogin == userLogin).ToList();
+            ViewData["CountryId"] = new SelectList(userCountries, "Id", "Name", region.CountryId);
+            
             return View(region);
         }
 

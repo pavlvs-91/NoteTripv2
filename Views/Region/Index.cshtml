@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Regions</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -28,7 +28,10 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model) 
+{
+    @if(item.Country.UserLogin == Context.Session.GetString("login"))
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -40,7 +43,7 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Country.UserLogin)
+                @Html.DisplayFor(modelItem => item.Country.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -48,6 +51,7 @@
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
+    }
 }
     </tbody>
 </table>
