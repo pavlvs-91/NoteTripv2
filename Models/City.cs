@@ -12,8 +12,9 @@ namespace NoteTrip.Models
         [Display(Name = "Name")]
         public required string Name { get; set; }
 
+        [Required]
         [Display(Name = "Region Id")]
-        public int? RegionId { get; set; }
+        public int RegionId { get; set; }
 
         [ForeignKey("RegionId")]
         public Region? Region { get; set; }

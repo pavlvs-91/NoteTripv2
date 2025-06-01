@@ -22,7 +22,7 @@ namespace NoteTrip.Controllers
         // GET: City
         public async Task<IActionResult> Index()
         {
-            var noteTripContext = _context.City.Include(c => c.Region);
+            var noteTripContext = _context.City.Include(c => c.Region).ThenInclude(r => r.Country);;
             return View(await noteTripContext.ToListAsync());
         }
 
@@ -48,7 +48,10 @@ namespace NoteTrip.Controllers
         // GET: City/Create
         public IActionResult Create()
         {
-            ViewData["RegionId"] = new SelectList(_context.Region, "Id", "Id");
+            string? userLogin = HttpContext.Session.GetString("login");
+            var userRegions = _context.Region.Include(r => r.Country).Where(r => r.Country.UserLogin == userLogin).ToList();
+            ViewData["RegionId"] = new SelectList(userRegions, "Id", "Name");
+
             return View();
         }
 
@@ -65,7 +68,11 @@ namespace NoteTrip.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RegionId"] = new SelectList(_context.Region, "Id", "Id", city.RegionId);
+            // ViewData["RegionId"] = new SelectList(_context.Region, "Id", "Id", city.RegionId);
+            string? userLogin = HttpContext.Session.GetString("login");
+            var userRegions = _context.Region.Include(r => r.Country).Where(r => r.Country.UserLogin == userLogin).ToList();
+            ViewData["RegionId"] = new SelectList(userRegions, "Id", "Name", city.RegionId);
+
             return View(city);
         }
 
@@ -82,7 +89,10 @@ namespace NoteTrip.Controllers
             {
                 return NotFound();
             }
-            ViewData["RegionId"] = new SelectList(_context.Region, "Id", "Id", city.RegionId);
+            string? userLogin = HttpContext.Session.GetString("login");
+            var userRegions = _context.Region.Include(r => r.Country).Where(r => r.Country.UserLogin == userLogin).ToList();
+            ViewData["RegionId"] = new SelectList(userRegions, "Id", "Name", city.RegionId);
+
             return View(city);
         }
 
@@ -118,7 +128,10 @@ namespace NoteTrip.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RegionId"] = new SelectList(_context.Region, "Id", "Id", city.RegionId);
+            string? userLogin = HttpContext.Session.GetString("login");
+            var userRegions = _context.Region.Include(r => r.Country).Where(r => r.Country.UserLogin == userLogin).ToList();
+            ViewData["RegionId"] = new SelectList(userRegions, "Id", "Name", city.RegionId);
+
             return View(city);
         }
 
