@@ -14,12 +14,17 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <select asp-for="Name" class="form-control" asp-items="ViewBag.CountryList">
+                    <option value="">-- select country --</option>
+                </select>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Continent" class="control-label"></label>
-                <input asp-for="Continent" class="form-control" />
+                <select asp-for="Continent" class="form-control" asp-items="ViewBag.ContinentList">
+                    <option value="">-- select continent --</option>
+                </select>
                 <span asp-validation-for="Continent" class="text-danger"></span>
             </div>
             <div class="form-group">

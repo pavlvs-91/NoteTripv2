@@ -49,6 +49,13 @@ namespace NoteTrip.Controllers
         public IActionResult Create()
         {
             ViewData["UserLogin"] = new SelectList(_context.User, "Login", "Login");
+            var countries = ISO3166.Country.List.Select(c => c.Name).OrderBy(n => n).ToList();
+            var continents = new List<string>
+            {
+                "Africa", "Asia", "Europe", "North America", "South America", "Oceania", "Antarctica"
+            };
+            ViewBag.CountryList = new SelectList(countries);
+            ViewBag.ContinentList = new SelectList(continents);
             return View();
         }
 
@@ -85,6 +92,13 @@ namespace NoteTrip.Controllers
                 return NotFound();
             }
             ViewData["UserLogin"] = new SelectList(_context.User, "Login", "Login", country.UserLogin);
+            var countries = ISO3166.Country.List.Select(c => c.Name).OrderBy(n => n).ToList();
+            var continents = new List<string>
+            {
+                "Africa", "Asia", "Europe", "North America", "South America", "Oceania", "Antarctica"
+            };
+            ViewBag.CountryList = new SelectList(countries);
+            ViewBag.ContinentList = new SelectList(continents);
             return View(country);
         }
 

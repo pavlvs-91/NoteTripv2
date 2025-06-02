@@ -1,8 +1,64 @@
-<div id="chartdiv" style="width: 100%; height: 500px;"></div>
+<style>
+  .stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  .stat-box {
+    background: #f0f4ff;
+    border-radius: 8px;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  .stat-box h2 {
+    margin: 0;
+    font-size: 2.5rem;
+    color: #2a4d8f;
+  }
+  .stat-box p {
+    margin: 0;
+    font-weight: 600;
+    color: #4a6fa5;
+  }
+  .map-container {
+    background-color: #e0e0e0; /* lekko szary kafelek */
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  #chartdiv {
+    border-radius: 8px;
+    overflow: hidden;
+    background: white; /* jasna mapa jak wcześniej */
+  }
+</style>
+
+<div class="stats-container" role="region" aria-label="Country visit statistics">
+  <div class="stat-box">
+    <h2>@(ViewData["numOfVisitedCountries"] ?? 0)</h2>
+    <p>Countries visited</p>
+  </div>
+  <div class="stat-box">
+    <h2>@(ViewData["numOfCountries"] ?? 1)</h2>
+    <p>Countries total</p>
+  </div>
+  <div class="stat-box">
+    <h2>@($"{ViewData["percentageVisited"] ?? 0}%")</h2>
+    <p>Percentage visited</p>
+  </div>
+</div>
+
+<div class="map-container">
+  <div id="chartdiv" style="width: 100%; height: 500px;"></div>
+</div>
 
 <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
+
 <script>
   let visitedCountries = @Html.Raw(ViewData["VisitedCountriesJson"]);
 
@@ -17,7 +73,6 @@
       projection: am5map.geoMercator()
     }));
 
-    // Zoom control
     chart.set("zoomControl", am5map.ZoomControl.new(root, {}));
 
     var polygonSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
@@ -32,7 +87,7 @@
     polygonSeries.mapPolygons.template.adapters.add("fill", function(fill, target) {
       let id = target.dataItem.dataContext.id;
       if (visitedCountries.includes(id)) {
-        return am5.color(0xff0000); // kolor zaznaczenia
+        return am5.color(0xff0000);
       }
       return fill;
     });
