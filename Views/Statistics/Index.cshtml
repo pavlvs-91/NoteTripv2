@@ -1,81 +1,157 @@
-@model NoteTrip.Models.StatisticsViewModel
 @{
     ViewData["Title"] = "Statistics";
 }
+<style>
+  body {
+    font-family: 'Raleway', sans-serif;
+    color: #5b4636;
+    background: #fcf8f3;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.75rem;
+    color: #5b4636;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #7a6a54;
+    padding-bottom: 0.3rem;
+  }
+  .stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .stat-box {
+    background: #fcf8f3;
+    border-radius: 10px;
+    padding: 1.5rem 2.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    text-align: center;
+    max-width: 180px;
+    font-weight: 600;
+    color: #7a6a54;
+  }
+  .stat-box h2 {
+    margin: 0;
+    font-size: 2.5rem;
+    color: #5b4636;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+  }
+  table {
+    width: 100%;
+    max-width: 1000px;
+    border-collapse: collapse;
+    margin: 0 auto 3rem auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+  }
+  thead tr {
+    background-color: #e3d9c5;
+  }
+  thead th {
+    font-weight: 700;
+    padding: 1rem 1.2rem;
+    color: #5b4636;
+    text-align: left;
+  }
+  tbody tr:nth-child(even) {
+    background-color: #f7f2e9;
+  }
+  tbody td {
+    padding: 0.8rem 1.2rem;
+    color: #6d5c44;
+    font-weight: 600;
+  }
+</style>
 
-<h2>Global statistics</h2>
-<ul>
-    <li>Number of countries with at least 1 attraction visited: <strong>@ViewBag.VisitedCountriesCount</strong></li>
-    <li>Number of cities with at least 1 attraction visited: <strong>@ViewBag.VisitedCitiesCount</strong></li>
-</ul>
+<h1 class="mb-4" style="font-family: 'Playfair Display', serif; color: #5b4636;">@ViewData["Title"]</h1>
+
+<div class="stats-container" role="region" aria-label="Global statistics">
+  <div class="stat-box">
+    <h2>@(ViewBag.VisitedCountriesCount ?? 0)</h2>
+    <p>Countries visited</p>
+  </div>
+  <div class="stat-box">
+    <h2>@(ViewBag.VisitedCitiesCount ?? 0)</h2>
+    <p>Cities visited</p>
+  </div>
+</div>
+
 <h2>Highest rating attractions</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>City</th>
-            <th>Region</th>
-            <th>County</th>
-            <th>Rate</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var attraction in ViewBag.TopAttractions)
-        {
-            <tr>
-                <td>@attraction.Name</td>
-                <td>@attraction.City?.Name</td>
-                <td>@attraction.City?.Region?.Name</td>
-                <td>@attraction.City?.Region?.Country?.Name</td>
-                <td>@attraction.Rate</td>
-            </tr>
-        }
-    </tbody>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>City</th>
+      <th>Region</th>
+      <th>Country</th>
+      <th>Rate</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var attraction in ViewBag.TopAttractions)
+    {
+      <tr>
+        <td>@attraction.Name</td>
+        <td>@attraction.City?.Name</td>
+        <td>@attraction.City?.Region?.Name</td>
+        <td>@attraction.City?.Region?.Country?.Name</td>
+        <td>@attraction.Rate</td>
+      </tr>
+    }
+  </tbody>
 </table>
 
-
 <h2>Country Statistics</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Country</th>
-            <th>Visited Attractions</th>
-            <th>Total Attractions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var country in Model.CountryStats)
-        {
-            <tr>
-                <td>@country.CountryName</td>
-                <td>@country.VisitedCount</td>
-                <td>@country.TotalAttractions</td>
-            </tr>
-        }
-    </tbody>
+<table>
+  <thead>
+    <tr>
+      <th>Country</th>
+      <th>Visited Attractions</th>
+      <th>Total Attractions</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var country in Model.CountryStats)
+    {
+      <tr>
+        <td>@country.CountryName</td>
+        <td>@country.VisitedCount</td>
+        <td>@country.TotalAttractions</td>
+      </tr>
+    }
+  </tbody>
 </table>
 
 <h2>City Statistics</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>City</th>
-            <th>Region</th>
-            <th>Country</th>
-            <th>Visited %</th>
-            <th>Visited / Total</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var city in Model.CityStats)
-        {
-            <tr>
-                <td>@city.CityName</td>
-                <td>@city.RegionName</td>
-                <td>@city.CountryName</td>
-                <td>@city.VisitedPercentage %</td>
-                <td>@city.VisitedAttractions / @city.TotalAttractions</td>
-            </tr>
-        }
-    </tbody>
+<table>
+  <thead>
+    <tr>
+      <th>City</th>
+      <th>Region</th>
+      <th>Country</th>
+      <th>Visited %</th>
+      <th>Visited / Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var city in Model.CityStats)
+    {
+      <tr>
+        <td>@city.CityName</td>
+        <td>@city.RegionName</td>
+        <td>@city.CountryName</td>
+        <td>@city.VisitedPercentage %</td>
+        <td>@city.VisitedAttractions / @city.TotalAttractions</td>
+      </tr>
+    }
+  </tbody>
 </table>

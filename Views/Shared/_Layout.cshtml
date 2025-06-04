@@ -101,25 +101,25 @@
                         @if (Context.Session.GetString("login") != null) 
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Country" asp-action="Index">🌏 Your countries</a>
+                                <a class="nav-link" asp-area="" asp-controller="Country" asp-action="Index">🌏 Countries</a>
                             </li>
                         }
                         @if (Context.Session.GetString("login") != null) 
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Region" asp-action="Index">🏕️ Your regions</a>
+                                <a class="nav-link" asp-area="" asp-controller="Region" asp-action="Index">🏕️ Regions</a>
                             </li>
                         }
                         @if (Context.Session.GetString("login") != null) 
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="City" asp-action="Index">🌆 Your cities</a>
+                                <a class="nav-link" asp-area="" asp-controller="City" asp-action="Index">🌆 Cities</a>
                             </li>
                         }
                         @if (Context.Session.GetString("login") != null) 
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="TouristAttraction" asp-action="Index">⛪ Your attractions</a>
+                                <a class="nav-link" asp-area="" asp-controller="TouristAttraction" asp-action="Index">⛪ Attractions</a>
                             </li>
                         }
                         @if (Context.Session.GetString("login") != null) 
@@ -132,6 +132,12 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Map" asp-action="Show">🗺️ Map</a>
+                            </li>
+                        }
+                        @if (Context.Session.GetString("login") != null) 
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Board" asp-action="Show">🏆 Board</a>
                             </li>
                         }
                     </ul>

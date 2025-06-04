@@ -1,58 +1,71 @@
+@{
+    ViewData["Title"] = "Countries visited!";
+}
 <style>
-  .stats-container {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-bottom: 1rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  .stat-box {
-    background: #f0f4ff;
-    border-radius: 8px;
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    text-align: center;
-  }
-  .stat-box h2 {
-    margin: 0;
-    font-size: 2.5rem;
-    color: #2a4d8f;
-  }
-  .stat-box p {
-    margin: 0;
-    font-weight: 600;
-    color: #4a6fa5;
-  }
-  .map-container {
-    background-color: #e0e0e0; /* lekko szary kafelek */
-    padding: 1rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  }
-  #chartdiv {
-    border-radius: 8px;
-    overflow: hidden;
-    background: white; /* jasna mapa jak wcześniej */
-  }
+    .stats-container {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 1rem;
+        font-family: 'Raleway', sans-serif;
+    }
+    .stat-box {
+        background: #fcf8f3;
+        border-radius: 10px;
+        padding: 1.5rem 2.5rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        text-align: center;
+        max-width: 180px;
+    }
+    .stat-box h2 {
+        margin: 0;
+        font-size: 2.5rem;
+        color: #5b4636;
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+    }
+    .stat-box p {
+        margin: 0;
+        font-weight: 600;
+        color: #7a6a54;
+        font-size: 1.1rem;
+    }
+    .map-container {
+        background-color: #fcf8f3;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        max-width: 1000px;
+        margin: auto;
+    }
+    #chartdiv {
+        border-radius: 8px;
+        overflow: hidden;
+        background: white;
+        height: 500px;
+        width: 100%;
+    }
 </style>
 
+<h1 class="mb-4" style="font-family: 'Playfair Display', serif; color: #5b4636;">@ViewData["Title"]</h1>
+
 <div class="stats-container" role="region" aria-label="Country visit statistics">
-  <div class="stat-box">
-    <h2>@(ViewData["numOfVisitedCountries"] ?? 0)</h2>
-    <p>Countries visited</p>
-  </div>
-  <div class="stat-box">
-    <h2>@(ViewData["numOfCountries"] ?? 1)</h2>
-    <p>Countries total</p>
-  </div>
-  <div class="stat-box">
-    <h2>@($"{ViewData["percentageVisited"] ?? 0}%")</h2>
-    <p>Percentage visited</p>
-  </div>
+    <div class="stat-box">
+        <h2>@(ViewData["numOfVisitedCountries"] ?? 0)</h2>
+        <p>Countries visited</p>
+    </div>
+    <div class="stat-box">
+        <h2>@(ViewData["numOfCountries"] ?? 1)</h2>
+        <p>Countries total</p>
+    </div>
+    <div class="stat-box">
+        <h2>@($"{ViewData["percentageVisited"] ?? 0}%")</h2>
+        <p>Percentage visited</p>
+    </div>
 </div>
 
 <div class="map-container">
-  <div id="chartdiv" style="width: 100%; height: 500px;"></div>
+    <div id="chartdiv"></div>
 </div>
 
 <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
@@ -60,36 +73,36 @@
 <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
 
 <script>
-  let visitedCountries = @Html.Raw(ViewData["VisitedCountriesJson"]);
+    let visitedCountries = @Html.Raw(ViewData["VisitedCountriesJson"]);
 
-  am5.ready(function() {
-    var root = am5.Root.new("chartdiv");
+    am5.ready(function() {
+        var root = am5.Root.new("chartdiv");
 
-    var chart = root.container.children.push(am5map.MapChart.new(root, {
-      panX: "translateX",
-      panY: "translateY",
-      wheelX: "zoom",
-      wheelY: "zoom",
-      projection: am5map.geoMercator()
-    }));
+        var chart = root.container.children.push(am5map.MapChart.new(root, {
+            panX: "translateX",
+            panY: "translateY",
+            wheelX: "zoom",
+            wheelY: "zoom",
+            projection: am5map.geoMercator()
+        }));
 
-    chart.set("zoomControl", am5map.ZoomControl.new(root, {}));
+        chart.set("zoomControl", am5map.ZoomControl.new(root, {}));
 
-    var polygonSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
-      geoJSON: am5geodata_worldLow
-    }));
+        var polygonSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
+            geoJSON: am5geodata_worldLow
+        }));
 
-    polygonSeries.mapPolygons.template.setAll({
-      tooltipText: "{name}",
-      interactive: true
+        polygonSeries.mapPolygons.template.setAll({
+            tooltipText: "{name}",
+            interactive: true
+        });
+
+        polygonSeries.mapPolygons.template.adapters.add("fill", function(fill, target) {
+            let id = target.dataItem.dataContext.id;
+            if (visitedCountries.includes(id)) {
+                return am5.color(0xff0000);
+            }
+            return fill;
+        });
     });
-
-    polygonSeries.mapPolygons.template.adapters.add("fill", function(fill, target) {
-      let id = target.dataItem.dataContext.id;
-      if (visitedCountries.includes(id)) {
-        return am5.color(0xff0000);
-      }
-      return fill;
-    });
-  });
 </script>

@@ -1,0 +1,164 @@
+@model List<NoteTrip.Models.UserRankingViewModel>
+
+<style>
+    h2 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 2.5rem;
+        color: #5b4636; /* ciemny brąz */
+        text-align: center;
+        margin-bottom: 2rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    .podium-container {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 3rem;
+        flex-wrap: wrap;
+    }
+
+    .card {
+        background-color: #fcf8f3;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(91, 70, 54, 0.15);
+        padding: 1.5rem 2rem;
+        width: 220px;
+        text-align: center;
+        transition: transform 0.2s;
+        border: 1px solid #5b4636;
+        color: #5b4636;
+        font-family: 'Raleway', sans-serif;
+    }
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 18px rgba(91, 70, 54, 0.3);
+    }
+
+    .rank-number {
+        font-size: 2.5rem;
+        font-weight: 900;
+        margin-bottom: 0.3rem;
+    }
+
+    .first-place {
+        background: linear-gradient(135deg, #f9e7a1, #fcefd9);
+        border-color: #d4b300;
+        box-shadow: 0 0 15px #d4b300aa;
+    }
+    .second-place {
+        background: linear-gradient(135deg, #e2e2e2, #f4f4f4);
+        border-color: #7a7a7a;
+        box-shadow: 0 0 15px #7a7a7aaa;
+    }
+    .third-place {
+        background: linear-gradient(135deg, #d2b48c, #e6ccb2);
+        border-color: #a67c00;
+        box-shadow: 0 0 15px #a67c00aa;
+    }
+
+    .user-login {
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .user-name {
+        font-size: 1rem;
+        color: #7a6b58;
+        margin-bottom: 0.8rem;
+    }
+
+    .countries-visited {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #5b4636;
+    }
+
+    .list-container {
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .list-item {
+        background: #fcf8f3;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(91, 70, 54, 0.07);
+        padding: 0.8rem 1.2rem;
+        margin-bottom: 0.8rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid #5b4636;
+        transition: background-color 0.15s, box-shadow 0.15s;
+        font-family: 'Raleway', sans-serif;
+        color: #5b4636;
+    }
+    .list-item:hover {
+        background-color: #f4efe7;
+        box-shadow: 0 4px 14px rgba(91, 70, 54, 0.15);
+    }
+
+    .list-rank {
+        font-weight: 700;
+        font-size: 1.2rem;
+        width: 35px;
+        text-align: center;
+    }
+    .list-info {
+        flex-grow: 1;
+        padding-left: 10px;
+        color: #5b4636;
+    }
+    .list-login {
+        font-weight: 700;
+    }
+    .list-name {
+        color: #7a6b58;
+        margin-left: 5px;
+    }
+    .list-countries {
+        font-weight: 600;
+        width: 120px;
+        text-align: right;
+    }
+</style>
+
+<h2>User Ranking by Countries Visited</h2>
+
+<div class="podium-container">
+    @for (int i = 0; i < Model.Count && i < 3; i++)
+    {
+        var user = Model[i];
+        var cssClass = i switch
+        {
+            0 => "card first-place",
+            1 => "card second-place",
+            2 => "card third-place",
+            _ => "card"
+        };
+        <div class="@cssClass">
+            <div class="rank-number">#@(i + 1)</div>
+            <div class="user-login">@user.Login</div>
+            <div class="user-name">@user.Name @user.LastName</div>
+            <div class="countries-visited">@user.CountriesVisited countries</div>
+        </div>
+    }
+</div>
+
+<div class="list-container">
+    @for (int i = 3; i < Model.Count; i++)
+    {
+        var user = Model[i];
+        <div class="list-item">
+            <div class="list-rank">#@(i + 1)</div>
+            <div class="list-info">
+                <span class="list-login">@user.Login</span>
+                <span class="list-name">@user.Name @user.LastName</span>
+            </div>
+            <div class="list-countries">@user.CountriesVisited</div>
+        </div>
+    }
+</div>
