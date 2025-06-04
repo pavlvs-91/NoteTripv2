@@ -29,3 +29,141 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+body, html {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #fcf8f3;
+  font-family: 'Raleway', sans-serif;
+}
+
+header {
+  background-color: #5b4636; /* ciemny brąz */
+  color: #f4e9d8;
+  padding: 0.75rem 0;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+header .navbar-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: #fcefd9 !important;
+}
+
+header .nav-link {
+  color: #fcefd9 !important;
+  font-weight: 500;
+}
+
+header .nav-link:hover {
+  text-decoration: underline;
+}
+
+main {
+  flex: 1 0 auto;
+  padding: 2rem 1rem;
+}
+
+.main-container {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  max-width: 1000px;
+  margin: auto;
+}
+
+footer {
+  background-color: #ece3d5;
+  color: #5b4636;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  border-top: 1px solid #d5c4af;
+}
+
+button.btn-outline-light.btn-sm:hover {
+  background-color: #fcefd9;
+  color: #5b4636;
+  border-color: #fcefd9;
+}
+
+.travel-icon {
+  margin-right: 0.4rem;
+}
+
+body {
+  font-family: 'Raleway', sans-serif;
+  color: #5b4636;
+  background: #fcf8f3;
+}
+
+h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.75rem;
+  color: #5b4636;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #7a6a54;
+  padding-bottom: 0.3rem;
+}
+
+.stats-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.stat-box {
+  background: #fcf8f3;
+  border-radius: 10px;
+  padding: 1.5rem 2.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  text-align: center;
+  max-width: 180px;
+  font-weight: 600;
+  color: #7a6a54;
+}
+.stat-box h2 {
+  margin: 0;
+  font-size: 2.5rem;
+  color: #5b4636;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+}
+table {
+  width: 100%;
+  max-width: 1000px;
+  border-collapse: collapse;
+  margin: 0 auto 3rem auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+thead tr {
+  background-color: #e3d9c5;
+}
+thead th {
+  font-weight: 700;
+  padding: 1rem 1.2rem;
+  color: #5b4636;
+  text-align: left;
+}
+tbody tr:nth-child(even) {
+  background-color: #f7f2e9;
+}
+tbody td {
+  padding: 0.8rem 1.2rem;
+  color: #6d5c44;
+  font-weight: 600;
+}

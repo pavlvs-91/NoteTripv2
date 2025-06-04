@@ -4,12 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Countries</h1>
+<h2>Countries</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table>
     <thead>
         <tr>
             <th>
@@ -27,6 +27,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Capital)
             </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
