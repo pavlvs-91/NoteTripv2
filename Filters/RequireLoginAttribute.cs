@@ -7,26 +7,33 @@ public class RequireLoginAttribute : ActionFilterAttribute
     {
         var session = context.HttpContext.Session;
         var path = context.HttpContext.Request.Path;
+        
 
-        if (!(path.StartsWithSegments("/Login") || path.StartsWithSegments("/Account")))
+        var allowedPaths = new[] { "/Login", "/Account", "/api", "/Login/LogOut" };
+        if (!allowedPaths.Any(p => path.StartsWithSegments(p)))
         {
             if (string.IsNullOrEmpty(session.GetString("login")))
             {
                 context.Result = new RedirectToActionResult("Form", "Login", null);
+                return;
             }
         }
-        if (path.StartsWithSegments("/User"))
+
+        if (path.StartsWithSegments("/User") && string.IsNullOrEmpty(session.GetString("role")))
         {
-            if (string.IsNullOrEmpty(session.GetString("role")))
-            {
-                context.Result = new RedirectToActionResult("Index", "Home", null);
-            }
+            context.Result = new RedirectToActionResult("Index", "Home", null);
+            return;
         }
-        if (!string.IsNullOrEmpty(session.GetString("role")) &&
-            !path.StartsWithSegments("/User") &&
-            !path.StartsWithSegments("/Login/LogOut")){
+
+        if (!string.IsNullOrEmpty(session.GetString("role")) 
+            && !path.StartsWithSegments("/User") 
+            && !path.StartsWithSegments("/Login/LogOut"))
+        {
             context.Result = new RedirectToActionResult("Index", "User", null);
+            return;
         }
+
         base.OnActionExecuting(context);
     }
+
 }

@@ -17,14 +17,30 @@ public class Map : Controller
     }
     public IActionResult Show()
     {
-        
+        string login = HttpContext.Session.GetString("login");
         var countryMap = ISO3166.Country.List.GroupBy(c => c.Name).ToDictionary(g => g.Key, g => g.First().TwoLetterCode);
-        var visitedCountries = _context.Country
-            .Where(c => c.UserLogin == HttpContext.Session.GetString("login"))
-            .Select(c => countryMap.ContainsKey(c.Name) ? countryMap[c.Name] : null
-            )
-            .ToList();
-
+        var countryStats = _context.Country
+                .Where(c => c.UserLogin == login)
+                .Include(c => c.Regions)
+                .ThenInclude(r => r.Cities)
+                .ThenInclude(city => city.TouristAttractions)
+                .Select(c => new
+                {
+                    CountryName = c.Name,
+                    VisitedCount = c.Regions
+                        .SelectMany(r => r.Cities)
+                        .SelectMany(city => city.TouristAttractions)
+                        .Count(attr => attr.Visited)
+                })
+                .ToList();
+        var visitedCountries = new List<string>();
+        foreach (var country in countryStats)
+        {
+            if (country.VisitedCount > 0 && countryMap.ContainsKey(country.CountryName))
+            {
+                visitedCountries.Add(countryMap[country.CountryName]);
+            }
+        }
         var numOfCountries = ISO3166.Country.List.Count(); 
         var numOfVisitedCountries = visitedCountries.Count();
         var percentageVisited = numOfVisitedCountries * 100 / numOfCountries;

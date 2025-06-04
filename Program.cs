@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NoteTrip.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<NoteTripContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("NoteTripContext")));
