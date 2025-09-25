@@ -14,6 +14,18 @@ Trip Helper is a web application designed to help you organize and track your tr
 - **Leaderboard:** Track your travel progress and compete with other users.  
 - **Easy-to-Use Interface:** Intuitive design allows smooth navigation and editing of your data.
 
+Adding countries to your list:
+
+![Image_1](img/img1.jpg)
+
+Map with countries you have already visited:
+
+![Image_2](img/img2.jpg)
+
+Global users' ranking:
+
+![Image_3](img/img3.jpg)
+
 ## Technologies
 
 - **Language:** C#  
